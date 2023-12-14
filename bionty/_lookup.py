@@ -18,7 +18,10 @@ class lookup:
     gene_id = _lookup(values=set(GENE_COLUMNS.values()))
     protein_id = _lookup(values=set(PROTEIN_COLUMNS.values()))
 
-    bfxpipelines_json = s3_bionty_assets(filename="bfxpipelines.json")
-    with open(bfxpipelines_json) as file:
-        PIPELINES = json.load(file)
-    bfxpipeline_id = _lookup(values=PIPELINES)
+    try:
+        bfxpipelines_json = s3_bionty_assets(filename="bfxpipelines.json")
+        with open(bfxpipelines_json) as file:
+            PIPELINES = json.load(file)
+        bfxpipeline_id = _lookup(values=PIPELINES)
+    except PermissionError as e:
+        bfxpipeline_id = _lookup(values=[])
